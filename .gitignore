@@ -4,3 +4,5 @@ venv/Scripts/
 venv/
 
 .idea/
+
+Project/appdir/__pycache__/
