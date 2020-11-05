@@ -2,3 +2,5 @@
 Project/appdir/__pycache__/
 
 Project/.idea/
+
+*.db
