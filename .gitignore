@@ -1,8 +1,4 @@
 
-venv/Scripts/
-
-venv/
-
-.idea/
-
 Project/appdir/__pycache__/
+
+Project/.idea/
