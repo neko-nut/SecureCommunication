@@ -3,54 +3,31 @@ from flask import request
 from werkzeug.security import check_password_hash
 
 from appdir import application
+from appdir.forms import LoginForm, RegisterForm
+from appdir.models import User
+from appdir import db
 
 
 @application.route('/')
 def hello():
-    return "hello"
-
-@application.route('/mainpage')
-def main_page():
-    """
-
-    :return:
-    """
-    if session.get("USERID") is None:
-        return render_template("main_page.html", language=getLanguage())
-    elif session.get("USERTYPE") is '0':
-        return render_template("customer_main_page.html", language=getLanguage(),
-                               username=getCustomerById(session['USERID']).name)
-    elif session.get("USERTYPE") is '1':
-        return render_template("employee_main_page.html", language=getLanguage())
-    else:
-        return render_template("main_page.html", language=getLanguage())
-
+    return 'hello'
 
 @application.route('/login', methods=['GET', 'POST'])
 def login():
-    """
-
-    :return:
-    """
-    getLanguage()
     form = LoginForm()
-    form.type.choices = [('0', getLanguage()["Customer"]), ('1', getLanguage()["Employee"])]
-    form.submit.label.text = getLanguage()["Login"]
     if form.validate_on_submit():
-        user = getUser(form.username.data, form.type.data)
+        user = User.query.filter_by(name=form.username).first()
         if not user:
-            flash(getLanguage()["Incorrect User"])
+            flash("Username or password is not correct so please ")
             return redirect('login')
         elif not check_password_hash(user.password, form.password.data):
-            flash(getLanguage()["Incorrect User"])
+            flash("Incorrect User")
             return redirect('login')
         else:
             session["USERID"] = user.id
             session["USERTYPE"] = form.type.data
             return redirect(url_for('main_page'))
-    flash(getLanguage()["Enter Sign In"])
-    # print(getLanguage()["Enter"])
-    return render_template("login_page.html", form=form, language=getLanguage(), page="login")
+    return render_template("login.html", form=form)
 
 
 @application.route('/logout')
@@ -61,7 +38,7 @@ def logout():
     """
     session.pop("USERID", None)
     session.pop("USERTYPE", None)
-    flash(['Logout'])
+    flash("You have logout")
     return redirect(url_for('login'))
 
 
@@ -71,19 +48,19 @@ def register():
 
     :return:
     """
-    getLanguage()
     form = RegisterForm()
-    form.submit.label.text = getLanguage()["Submit"]
     if form.validate_on_submit():
+        print(form.username.data)
         if form.password.data != form.repeat_pwd.data:
-            flash(getLanguage()['Inconsistent Password'])
+            flash('Inconsistent Password')
             return redirect('register')
-        elif getCustomerByName(form.username.data):
-            flash(getLanguage()['Username is occupied'])
+        elif User.query.filter_by(name=form.username.data).first():
+            flash('Username is occupied, please choose another one.')
             return redirect('register')
         else:
-            addCustomer(form)
+            db.session.add(User(name=form.username.data, password=form.password.data, phone=form.phone.data, email=form.email.data))
+            db.session.commit()
             return redirect(url_for("login"))
-    flash(getLanguage()['Enter Sign Up'])
-    return render_template('register_page.html', form=form, language=getLanguage())
+    return render_template('register.html', form=form)
+
 

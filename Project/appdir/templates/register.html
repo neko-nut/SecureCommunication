@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+
+     <form role="form" action="" method="post" novalidate>
+         {{ form.hidden_tag() }}
+
+         Username
+         {{ form.username() }}
+         <br>
+         Password
+         {{ form.password() }}
+         <br>
+         Confirm Password
+         {{ form.repeat_pwd() }}
+         <br>
+         email
+         {{ form.email() }}
+         <br>
+         Phone
+         {{ form.phone() }}
+         <br>
+         {{ form.submit() }}
+     </form>
+{% endblock %}
