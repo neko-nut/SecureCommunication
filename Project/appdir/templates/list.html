@@ -2,7 +2,7 @@
 {% block content %}
 
     {% for user in onlines %}
-        {{ user.name }}
+        <a href={{  url_for("communicate", user1=user.id )}}>{{ user.name }}</a>
     {% endfor %}
 
 {% endblock %}

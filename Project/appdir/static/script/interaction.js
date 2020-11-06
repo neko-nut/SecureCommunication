@@ -28,37 +28,11 @@ function encrypt_login(){
 }
 
 
+function encrypt_sentence(){
 
 
-//
-//
-// function check_username() {
-//     // get the source element
-//     let chosen_user = $(this).find("");
-//     $("#checkuser").removeClass();
-//     $("#checkuser").html('<img src="/static/style/loading.gif")>');
-//
-//     // ajax code
-//     $.post('/checkuser', {
-//         'username': chosen_user.val() //field value being sent to the server
-//     }).done(function (response) {
-//         let server_response = response['text']
-//         let server_code = response['returnvalue']
-//         if (server_code == 0) { // success: Username does not exist in the databas
-//             $("#checkuser").html('<span>' + server_response + '</span>');
-//             $("#checkuser").addClass("success");
-//         } else { // failure: Username already exists in the database
-//             chosen_user.val("");
-//             chosen_user.focus();
-//             $("#checkuser").html('<span>' + server_response + '</span>');
-//             $("#checkuser").addClass("failure");
-//         }
-//     }).fail(function () {
-//         $("#checkuser").html('<span>Error contacting server</span>');
-//         $("#checkuser").addClass("failure");
-//     });
-//     // end of ajax code
-// }
+}
+
 
 
 

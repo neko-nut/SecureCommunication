@@ -18,3 +18,6 @@ class RegisterForm(FlaskForm):
     phone = StringField('Phone Number')
     submit = SubmitField('Sign Up')
 
+
+class CommunicateForm(FlaskForm):
+    sentence = StringField("Sentence", validators=[DataRequired()])

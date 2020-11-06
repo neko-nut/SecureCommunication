@@ -1,7 +1,5 @@
-import random
-
 onlineUser = []
-communications = []
+communications = {}
 
 
 def get_online_user():
@@ -16,16 +14,29 @@ def remove_online_user(user_id):
     onlineUser.remove(user_id)
 
 
-def getCommunicate()
+def get_communication(user1, user2):
+    i = user1 + "," + user2
+    return communications[i]
 
-class Communicate:
-    key = 0
+
+def add_communication(user1, user2):
+    com = Communication(user1, user2)
+    i = user1 + ',' + user2
+    communications[i] = com
+    return com
+
+
+def remove_communication(user1, user2):
+    i = user1 + ',' + user2
+    communications.pop(i)
+
+
+class Communication:
     user1 = 0
     user2 = 0
     sentences = []
 
     def __init__(self, user_1, user_2):
-        self.key = random.randint(0, 2147483647)
         self.user1 = user_1
         self.user2 = user_2
         self.sentences = []
