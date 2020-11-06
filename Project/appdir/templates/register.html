@@ -19,7 +19,8 @@
             Phone
             {{ form.phone() }}
             <br>
-            {{ form.submit() }}
+            {{ form.submit(hidden = true) }}
+            <input id="submit_register" type="button" value="Sign Up">
         </div>
     </form>
 {% endblock %}

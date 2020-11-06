@@ -2,14 +2,23 @@
 $(document).ready(function(){
 	// add all event handlers here
 	// $("#register input[id=submit]").on("click", test);
-	$("#register input[id=password]").on("change", encrypt_password);
+	$("#submit_register").on("click", encrypt_password);
 });
 //
 function encrypt_password(){
-   let data = $("#register input[id=password]").val();
-   let key = $("#register input[id=username]").val() + "DES";
-   $.post('/enxryptdata', DES(data, key, "encrypt"))
+    let password = $("#register input[id=password]")
+    let data = password.val();
+    let key = $("#register input[id=username]").val() + "DES";
+    key = $.md5(key)
+    password.val(encrypt(data, key))
+    let repeat_pwd = $("#register input[id=repeat_pwd]")
+    data = repeat_pwd.val()
+    repeat_pwd.val(encrypt(data, key))
+    $("#register input[id=submit]").click()
 }
+
+
+
 
 
 //
