@@ -27,7 +27,6 @@ def login():
         else:
             session["USERID"] = user.id
             add_online_user(user.id)
-            print(get_online_user())
             return redirect(url_for('user_list'))
     return render_template("login.html", form=form)
 
@@ -60,5 +59,9 @@ def register():
 
 @application.route('/list')
 def user_list():
-    return render_template('list.html')
+    onlines = []
+    for i in get_online_user():
+        if i != session["USERID"]:
+            onlines.append(User.query.filter_by(id=i).first())
+    return render_template('list.html', onlines=onlines)
 
