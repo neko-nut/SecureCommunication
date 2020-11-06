@@ -1,15 +1,18 @@
 {% extends "base.html" %}
 {% block content %}
 
-     <form role="form" action="" method="post" novalidate>
-         {{ form.hidden_tag() }}
+    <form role="form" action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
 
-         Username
-         {{ form.username() }}
-         <br>
-         Password
-         {{ form.password() }}
-         <br>
-         {{ form.submit() }}
-     </form>
+        <div id="login">
+            Username
+            {{ form.username() }}
+            <br>
+            Password
+            {{ form.password() }}
+            <br>
+            {{ form.submit(hidden = true) }}
+            <input id="submit_login" type="button" value="Login">
+        </div>
+    </form>
 {% endblock %}

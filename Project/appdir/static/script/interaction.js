@@ -3,6 +3,7 @@ $(document).ready(function(){
 	// add all event handlers here
 	// $("#register input[id=submit]").on("click", test);
 	$("#submit_register").on("click", encrypt_password);
+	$("#submit_login").on("click", encrypt_login);
 });
 //
 function encrypt_password(){
@@ -17,6 +18,14 @@ function encrypt_password(){
     $("#register input[id=submit]").click()
 }
 
+function encrypt_login(){
+    let password = $("#login input[id=password]")
+    let data = password.val();
+    let key = $("#login input[id=username]").val() + "DES";
+    key = $.md5(key)
+    password.val(encrypt(data, key))
+    $("#login input[id=submit]").click()
+}
 
 
 

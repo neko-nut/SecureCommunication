@@ -17,18 +17,18 @@ def hello():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(name=form.username).first()
+        user = User.query.filter_by(name=form.username.data).first()
         if not user:
-            flash("Username or password is not correct so please ")
+            flash("Username or password is incorrect, please try again")
             return redirect('login')
-        elif not check_password_hash(user.password, form.password.data):
-            flash("Incorrect User")
+        elif not form.password.data == user.password:
+            flash("Username or password is incorrect, please try again")
             return redirect('login')
         else:
             session["USERID"] = user.id
-            session["USERTYPE"] = form.type.data
             add_online_user(user.id)
-            return redirect(url_for('main_page'))
+            print(get_online_user())
+            return redirect(url_for('user_list'))
     return render_template("login.html", form=form)
 
 
@@ -51,17 +51,14 @@ def register():
             flash('Username is occupied, please choose another one.')
             return redirect('register')
         else:
-            return jsonify({
-                "name": form.username.data,
-                "password": form.password.data,
-
-            })
+            db.session.add(
+                User(name=form.username.data, password=form.password.data, phone=form.phone.data, email=form.email.data))
+            db.session.commit()
+            return redirect(url_for("login"))
     return render_template('register.html', form=form)
 
 
-@application.route('/adduser', methods=['GET', 'POST'])
-def add_user(name, password, phone, email):
-    db.session.add(
-        User(name=name, password=password, phone=phone, email=email))
-    db.session.commit()
-    return redirect(url_for("login"))
+@application.route('/list')
+def user_list():
+    return render_template('list.html')
+
