@@ -1,11 +1,12 @@
 from flask import render_template, session, url_for, flash, redirect, jsonify
 from flask import request
 from werkzeug.security import check_password_hash
+from appdir import db
 
 from appdir import application
 from appdir.forms import LoginForm, RegisterForm
 from appdir.models import User
-from appdir import db
+from appdir.communications import get_online_user, add_online_user
 
 
 @application.route('/')
@@ -26,16 +27,13 @@ def login():
         else:
             session["USERID"] = user.id
             session["USERTYPE"] = form.type.data
+            add_online_user(user.id)
             return redirect(url_for('main_page'))
     return render_template("login.html", form=form)
 
 
 @application.route('/logout')
 def logout():
-    """
-
-    :return:
-    """
     session.pop("USERID", None)
     session.pop("USERTYPE", None)
     flash("You have logout")
@@ -44,13 +42,8 @@ def logout():
 
 @application.route('/register', methods=['GET', 'POST'])
 def register():
-    """
-
-    :return:
-    """
     form = RegisterForm()
     if form.validate_on_submit():
-        print(form.username.data)
         if form.password.data != form.repeat_pwd.data:
             flash('Inconsistent Password')
             return redirect('register')
@@ -58,9 +51,17 @@ def register():
             flash('Username is occupied, please choose another one.')
             return redirect('register')
         else:
-            db.session.add(User(name=form.username.data, password=form.password.data, phone=form.phone.data, email=form.email.data))
-            db.session.commit()
-            return redirect(url_for("login"))
+            return jsonify({
+                "name": form.username.data,
+                "password": form.password.data,
+
+            })
     return render_template('register.html', form=form)
 
 
+@application.route('/adduser', methods=['GET', 'POST'])
+def add_user(name, password, phone, email):
+    db.session.add(
+        User(name=name, password=password, phone=phone, email=email))
+    db.session.commit()
+    return redirect(url_for("login"))
