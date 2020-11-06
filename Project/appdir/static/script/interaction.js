@@ -1,127 +1,65 @@
-// 0 is encrypt while 1 is decrypt
-let method = 0
-// 0 is text while 1 is file
-let data_type = 0
-
-// get the elements
-let text_button = document.getElementById("text_button")
-let file_button = document.getElementById("file_button")
-let file = document.getElementById("file")
-let text = document.getElementById("text")
-let text_result = document.getElementById("text_result")
-let file_result = document.getElementById("file_result")
-// initially the data type is text, and the elements for the file should not be shown
-file.hidden = true
-file_result.hidden = true
-text_button.style =  "color: red"
-
-/**
- * if the user choose to input the text
- * show the elements that used to input text
- * hidden the elemets that used to habdle file
- */
-text_button.onclick = function(){
-    text.hidden = false
-    text_result.hidden = false
-    file.hidden = true
-    file_result.hidden = true
-    text_button.style =  "color: red"
-    file_button.style = "color: black"
-    data_type = 0
-}
-
-/**
- * if the user choose to input the file
- * show the elements that used to input file
- * hidden the elemets that used to habdle text
- */
-file_button.onclick = function(){
-    text.hidden = true
-    text_result.hidden = true
-    file.hidden = false
-    file_result.hidden = false
-    text_button.style =  "color: black"
-    file_button.style = "color: red"
-    data_type = 1
+// //from example code in class
+$(document).ready(function(){
+	// add all event handlers here
+	// $("#register input[id=submit]").on("click", test);
+	$("#register input[id=password]").on("change", encrypt_password);
+});
+//
+function encrypt_password(){
+   let data = $("#register input[id=password]").val();
+   let key = $("#register input[id=username]").val() + "DES";
+   $.post('/enxryptdata', DES(data, key, "encrypt"))
 }
 
 
-// get the elements
-let encrypt_button = document.getElementById("encrypt_button")
-let decrypt_button = document.getElementById("decrypt_button")
-// initilally the method is encrypt
-encrypt_button.style =  "color: red"
-
-/**
- * if change to encrypt
- * clean the file and switch the result and the data
- */
-encrypt_button.onclick = function(){
-    encrypt_button.style =  "color: red"
-    decrypt_button.style =  "color: black"
-    file.value = ''
-    if(data_type == 0 && method == 1){
-        let a = text_result.value
-        text_result.value = text.value
-        text.value = a
-    }
-    method = 0
-}
-
-/**
- * if change to decrypt
- * clean the file and switch the result and the data
- */
-decrypt_button.onclick = function(){
-    encrypt_button.style =  "color: black"
-    decrypt_button.style =  "color: red"
-    file.value = ''
-    if(data_type == 0 && method == 0){
-        let a = text_result.value
-        text_result.value = text.value
-        text.value = a
-    }
-    method = 1
-}
-
-// get the element
-key = document.getElementById('key')
-
-/**
- * if data type is text
- * chane the result with the change of data or key
- */
-text.oninput = function(){
-    if(method == 0){
-        text_result.value = encrypt(text.value, key.value);
-    }else{
-        text_result.value = decrypt(text.value, key.value);
-    }
-}
-key.oninput = function(){
-    if(data_type == 0){
-        if(method == 0){
-            text_result.value = encrypt(text.value, key.value);
-        }else{
-            text_result.value = decrypt(text.value, key.value);
-        }
-    }
-}
+//
+//
+// function check_username() {
+//     // get the source element
+//     let chosen_user = $(this).find("");
+//     $("#checkuser").removeClass();
+//     $("#checkuser").html('<img src="/static/style/loading.gif")>');
+//
+//     // ajax code
+//     $.post('/checkuser', {
+//         'username': chosen_user.val() //field value being sent to the server
+//     }).done(function (response) {
+//         let server_response = response['text']
+//         let server_code = response['returnvalue']
+//         if (server_code == 0) { // success: Username does not exist in the databas
+//             $("#checkuser").html('<span>' + server_response + '</span>');
+//             $("#checkuser").addClass("success");
+//         } else { // failure: Username already exists in the database
+//             chosen_user.val("");
+//             chosen_user.focus();
+//             $("#checkuser").html('<span>' + server_response + '</span>');
+//             $("#checkuser").addClass("failure");
+//         }
+//     }).fail(function () {
+//         $("#checkuser").html('<span>Error contacting server</span>');
+//         $("#checkuser").addClass("failure");
+//     });
+//     // end of ajax code
+// }
 
 
+
+
+/*
 // the name and the content of the file
 let name = ''
 let content = ''
 
 // new filereader
 let reader = new FileReader();
-
+*/
 /**
  * load the file
  * if encrypt, read the file as data URI, which will be used to encrypt
  * if decrypt, read the text in the file, which is the incrypted data 
  * @param {Object} event the event when load the file
  */
+/*
 file.onchange = function(event){
     let file = event.target.files[0];
     name = file.name
@@ -131,19 +69,24 @@ file.onchange = function(event){
         reader.readAsText(file);
     }
 }
+ */
 
 /**
  * get the data and store it in the content
  * @param {Object} event 
  */
+/*
 reader.onload = function(event) {
     content = event.target.result;
 };
+
+ */
 
 
 /**
  * execute the data and download the file
  */
+/*
 file_result.onclick = function() {
     let aTag = document.createElement('a');
     if(method == 0){
@@ -167,12 +110,14 @@ file_result.onclick = function() {
     }
 
 }
+ */
 
 /**
  * reference:  https://stackoverflow.com/questions/6850276/how-to-convert-dataurl-to-file-object-in-javascript
  * change the data URI into the file
  * @param {String} dataURI the dayaURI which is 
  */
+/*
 function dataURItoBlob(dataURI) {
     // convert base64 to raw binary data held in a string
     // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
@@ -197,3 +142,5 @@ function dataURItoBlob(dataURI) {
     return blob;
   
   }
+
+ */
