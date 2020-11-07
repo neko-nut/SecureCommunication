@@ -1,34 +1,35 @@
-onlineUser = []
 communications = {}
 
-
-def get_online_user():
-    return onlineUser
-
-
-def add_online_user(user_id):
-    onlineUser.append(user_id)
-
-
-def remove_online_user(user_id):
-    onlineUser.remove(user_id)
-
-
 def get_communication(user1, user2):
-    i = user1 + "," + user2
-    return communications[i]
+    if user1 < user2:
+        if user1 in communications:
+            if user2 in communications[user1]:
+                return communications[user1][user2]
+    return False
 
 
 def add_communication(user1, user2):
     com = Communication(user1, user2)
-    i = user1 + ',' + user2
-    communications[i] = com
+    if user1 < user2:
+        if user1 in communications:
+            communications[user1][user2] = com
+        else:
+            communications[user1] = {}
+            communications[user1][user2] = com
+    else:
+        if user2 in communications:
+            communications[user2][user1] = com
+        else:
+            communications[user2] = {}
+            communications[user2][user1] = com
     return com
 
 
 def remove_communication(user1, user2):
-    i = user1 + ',' + user2
-    communications.pop(i)
+    if user1 < user2:
+        communications[user1].pop(user2)
+    else:
+        communications[user2].pop(user1)
 
 
 class Communication:

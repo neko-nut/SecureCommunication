@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <dev id="com">
+
+    </dev>
+
+    <script>
+        setInterval(function () {
+            let user
+            $.get("/getuser").done(function (response) {
+                user = response["id"]
+            })
+            $.get("/getsentence", {"user1": user1, "user2": user2}).done(function (sentences) {
+                for (let i = 0; i < sentences.length; i++) {
+                    if (user in sentences[i]) {
+                        $("#com").append("<atalk>" + decrypt(sentences[i][user], key) + "</atalk>")
+                    } else {
+                        $("#com").append("<div>" + decrypt(sentences[i][user_id], key) + "</div>")
+                    }
+                }
+            })
+        }, 300);
+    </script>
+
+    
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <dev id="communicate">
+            {{ form.sentence() }}
+            {{ form.submit(hidden = true) }}
+            <input id="submit_sentences" type="button" value="Login">
+        </dev>
+    </form>
+
+{% endblock %}
