@@ -2,7 +2,20 @@
 {% block content %}
 
     {% for user in onlines %}
-        <a href={{  url_for("communicate", user1=user.id )}}>{{ user.name }}</a>
+        <div class="user">
+            <p onclick="choose({{ user.name }})">{{ user.name }}</p>
+        </div>
+        <a id="{{ user.name }}" href={{ url_for("communicate", user1=user.id ) }}>111</a>
     {% endfor %}
+
+    <script>
+        function choose(element) {
+            user2 = element.id
+            console.log(user2)
+            let list = [user2, user1].sort()
+            key = $.md5(list[0] + "," + list[1]);
+            element.click()
+        }
+    </script>
 
 {% endblock %}

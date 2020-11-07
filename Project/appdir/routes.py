@@ -6,7 +6,7 @@ from appdir import db
 from appdir import application
 from appdir.forms import LoginForm, RegisterForm, CommunicateForm
 from appdir.models import User
-from appdir.communications import add_online_user, get_communication, add_communication
+from appdir.communications import get_communication, add_communication
 
 @application.route('/')
 def hello():
@@ -25,7 +25,6 @@ def login():
             return redirect('login')
         else:
             session["USERID"] = user.id
-            add_online_user(user.id)
             return redirect(url_for('user_list'))
     return render_template("login.html", form=form)
 

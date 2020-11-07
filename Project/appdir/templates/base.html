@@ -5,28 +5,29 @@
     <title>Secture Communication</title>
     <link rel="stylesheet" href="../static/style/style.css">
     <script src="../static/script/jquery.js"></script>
-    <script src="../static/script/des.js"></script>
+
     <script src="../static/script/jquery.md5.js"></script>
-<script src="../static/script/interaction.js"></script>
+
 </head>
 <body>
 <img src="../static/image/logo.JPG" alt="Pulpit rock">
 {% with messages = get_flashed_messages() %}
-{% if messages %}
+    {% if messages %}
 
-<ul>
-    {% for message in messages %}
-    <li>{{ message }}</li>
-    {% endfor %}
-</ul>
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
 
 
-{% endif %}
+    {% endif %}
 {% endwith %}
 
 {% block content %}
 {% endblock %}
 
-
+<script src="../static/script/des.js"></script>
+<script src="../static/script/interaction.js"></script>
 </body>
 </html>
