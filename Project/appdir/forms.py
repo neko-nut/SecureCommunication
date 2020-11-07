@@ -3,6 +3,7 @@ from wtforms import StringField, PasswordField, SubmitField
 from wtforms.fields.html5 import EmailField, DateField
 from wtforms.validators import DataRequired, Email, Length
 
+
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired('Please enter your username. ')])
     password = PasswordField('Password', validators=[DataRequired('Please enter your password')])
@@ -21,3 +22,4 @@ class RegisterForm(FlaskForm):
 
 class CommunicateForm(FlaskForm):
     sentence = StringField("Sentence", validators=[DataRequired()])
+    submit = SubmitField('submit')

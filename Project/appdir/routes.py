@@ -4,10 +4,9 @@ from werkzeug.security import check_password_hash
 from appdir import db
 
 from appdir import application
-from appdir.forms import LoginForm, RegisterForm
+from appdir.forms import LoginForm, RegisterForm, CommunicateForm
 from appdir.models import User
-from appdir.communications import get_online_user, add_online_user
-
+from appdir.communications import add_online_user, get_communication, add_communication
 
 @application.route('/')
 def hello():
