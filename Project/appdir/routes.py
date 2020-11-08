@@ -8,9 +8,6 @@ from appdir.forms import LoginForm, RegisterForm, CommunicateForm
 from appdir.models import User
 from appdir.communications import get_communication, add_communication
 
-@application.route('/')
-def hello():
-    return 'hello'
 
 @application.route('/login', methods=['GET', 'POST'])
 def login():
@@ -25,6 +22,7 @@ def login():
             return redirect('login')
         else:
             session["USERID"] = user.id
+            session["SPEAKER"] = user.id
             return redirect(url_for('user_list'))
     return render_template("login.html", form=form)
 
@@ -32,7 +30,7 @@ def login():
 @application.route('/logout')
 def logout():
     session.pop("USERID", None)
-    session.pop("USERTYPE", None)
+    session.pop("SPEAKER", None)
     flash("You have logout")
     return redirect(url_for('login'))
 
@@ -55,15 +53,10 @@ def register():
     return render_template('register.html', form=form)
 
 
-@application.route('/list')
+@application.route('/list', methods=['GET', 'POST'])
 def user_list():
-    return render_template('list.html', onlines=User.query.all())
-
-
-@application.route('/communicate/<user1>', methods=['GET', 'POST'])
-def communicate(user1):
-    user2 = int(session['USERID'])
-    user1 = int(user1)
+    user1 = int(session['USERID'])
+    user2 = int(session['SPEAKER'])
     if get_communication(user1, user2) is False:
         com = add_communication(user1, user2)
     else:
@@ -71,15 +64,25 @@ def communicate(user1):
     form = CommunicateForm()
     if form.validate_on_submit():
         com.add_sentence(form.sentence.data, session["USERID"])
-        return redirect(url_for("communicate"))
-    return render_template("communicate.html", form=form)
+    return render_template('list.html', onlines=User.query.all(), form=form)
 
 
-@application.route("/getsentence/<user1>/<user2>")
-def get_sentence(user1, user2):
-    user1 = User.query.filter_by(name=user1).first().id
-    user2 = User.query.filter_by(name=user2).first().id
-    com = get_communication(user1, user2)
+@application.route("/changespeaker", methods=['GET', 'POST'])
+def change_speaker():
+    speaker = request.args.get("speaker")
+    session["SPEAKER"] = speaker
+    id1 = int(session["USERID"])
+    id2 = int(session["SPEAKER"])
+    if get_communication(id1, id2) is False:
+        add_communication(id1, id2)
+    return jsonify({"success": 1})
+
+
+@application.route("/getsentence")
+def get_sentence():
+    id1 = int(session["USERID"])
+    id2 = int(session["SPEAKER"])
+    com = get_communication(id1, id2)
     return jsonify(com.get_sentence())
 
 
@@ -88,8 +91,21 @@ def get_user():
     return jsonify({"id": session["USERID"]})
 
 
+@application.route("/getspeakers")
+def get_speakers():
+    id1 = int(session["USERID"])
+    id2 = int(session["SPEAKER"])
+    if id1 > id2:
+        user1 = User.query.filter_by(id=id1).first()
+        user2 = User.query.filter_by(id=id2).first()
+    else:
+        user1 = User.query.filter_by(id=id2).first()
+        user2 = User.query.filter_by(id=id1).first()
+    return jsonify({"user1": user1.name, "user2": user2.name})
 
 
-
+@application.route("/getspeaker")
+def get_speaker():
+    return jsonify({"speaker": session["SPEAKER"]})
 
 

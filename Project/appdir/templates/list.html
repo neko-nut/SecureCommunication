@@ -1,21 +1,87 @@
 {% extends "base.html" %}
 {% block content %}
 
-    {% for user in onlines %}
-        <div class="user">
-            <p onclick="choose({{ user.name }})">{{ user.name }}</p>
-        </div>
-        <a id="{{ user.name }}" href={{ url_for("communicate", user1=user.id ) }}>111</a>
-    {% endfor %}
+    <table>
+        <tr>
+            <td rowspan="3">
+                {% for user in onlines %}
+                    <div class="user">
+                        <p onclick="changespeaker({{ user.id }})">{{ user.name }}</p>
+                    </div>
+                {% endfor %}
+            </td>
+            <td>
+                <speaker>
 
-    <script>
-        function choose(element) {
-            user2 = element.id
-            console.log(user2)
-            let list = [user2, user1].sort()
-            key = $.md5(list[0] + "," + list[1]);
-            element.click()
-        }
-    </script>
+                </speaker>
+                <script>
+                    $.get("/getspeaker").done(function (response) {
+                        let speaker = response["speaker"]
+                        $("speaker").html("<speaker>" + speaker + "</speaker>")
+                    })
+
+                    function changespeaker(id) {
+                        console.log(id)
+                        $.get("/changespeaker", {"speaker": id})
+                        $.get("/getspeaker").done(function (response) {
+                            let speaker = response["speaker"]
+                            $("speaker").html("<speaker>" + speaker + "</speaker>")
+                        })
+                    }
+                </script>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <dev id="com">
+
+                </dev>
+
+                <script>
+                    setInterval(function () {
+                        let user1
+                        $.get("/getuser").done(function (response) {
+                            user1 = response["id"]
+                            let user2
+                            $.get("/getspeaker").done(function (response) {
+                                user2 = response["speaker"]
+                                let k
+                                $.get("/getspeakers").done(function (response) {
+                                    k = $.md5(response["user1"] + ',' + response["user2"])
+                                    $.get("/getsentence").done(function (sentences) {
+                                        $("#com").empty()
+                                        for (let i = 0; i < sentences.length; i++) {
+                                            if (user1 in sentences[i]) {
+                                                $("#com").append("<atalk>" + decrypt(sentences[i][user1], k) + "</atalk><br>")
+                                            } else {
+                                                $("#com").append("<btalk>" + decrypt(sentences[i][user2], k) + "</btalk><br>")
+                                            }
+                                        }
+                                    })
+                                })
+                            })
+                        })
+                    }, 3000);
+                </script>
+            </td>
+        </tr>
+        <tr>
+            <td>
+
+                <form action="" method="post" novalidate>
+                    {{ form.hidden_tag() }}
+                    <dev id="communicate">
+                        {{ form.sentence() }}
+                        {{ form.submit(hidden = true) }}
+                        <input id="submit_sentences" type="button" value="Login">
+                    </dev>
+                </form>
+
+            </td>
+
+        </tr>
+    </table>
+
 
 {% endblock %}

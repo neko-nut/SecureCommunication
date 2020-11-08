@@ -1,12 +1,14 @@
-// //from example code in class
-$(document).ready(function(){
-	// add all event handlers here
-	// $("#register input[id=submit]").on("click", test);
-	$("#submit_register").on("click", encrypt_password);
-	$("#submit_login").on("click", encrypt_login);
+//from example code in class
+$(document).ready(function () {
+    // add all event handlers here
+    $("#submit_register").on("click", encrypt_password);
+    $("#submit_login").on("click", encrypt_login);
+    // $(".user").on("click", create_communication);
+    $("#submit_sentences").on("click", encrypt_sentence);
 });
+
 //
-function encrypt_password(){
+function encrypt_password() {
     let password = $("#register input[id=password]")
     let data = password.val();
     let key = $("#register input[id=username]").val() + "DES";
@@ -18,23 +20,28 @@ function encrypt_password(){
     $("#register input[id=submit]").click()
 }
 
-function encrypt_login(){
+function encrypt_login() {
     let password = $("#login input[id=password]")
     let data = password.val();
-    let key = $("#login input[id=username]").val() + "DES";
+    let name = $("#login input[id=username]").val()
+    let key = name + "DES";
     key = $.md5(key)
     password.val(encrypt(data, key))
     $("#login input[id=submit]").click()
 }
 
 
-function encrypt_sentence(){
-
+function encrypt_sentence() {
+    $.get("/getspeakers").done(function (response) {
+        let k = $.md5(response["user1"] + ',' + response["user2"])
+        let sentence = $("#sentence")
+        let data = encrypt(sentence.val(), k)
+        sentence.val(data)
+        $("#communicate input[id=submit]").click()
+        sentence.val("")
+    })
 
 }
-
-
-
 
 
 /*
@@ -48,7 +55,7 @@ let reader = new FileReader();
 /**
  * load the file
  * if encrypt, read the file as data URI, which will be used to encrypt
- * if decrypt, read the text in the file, which is the incrypted data 
+ * if decrypt, read the text in the file, which is the incrypted data
  * @param {Object} event the event when load the file
  */
 /*
@@ -65,7 +72,7 @@ file.onchange = function(event){
 
 /**
  * get the data and store it in the content
- * @param {Object} event 
+ * @param {Object} event
  */
 /*
 reader.onload = function(event) {
@@ -107,7 +114,7 @@ file_result.onclick = function() {
 /**
  * reference:  https://stackoverflow.com/questions/6850276/how-to-convert-dataurl-to-file-object-in-javascript
  * change the data URI into the file
- * @param {String} dataURI the dayaURI which is 
+ * @param {String} dataURI the dayaURI which is
  */
 /*
 function dataURItoBlob(dataURI) {
