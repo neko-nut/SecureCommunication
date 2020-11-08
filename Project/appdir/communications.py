@@ -1,10 +1,15 @@
 communications = {}
 
+
 def get_communication(user1, user2):
     if user1 < user2:
         if user1 in communications:
             if user2 in communications[user1]:
                 return communications[user1][user2]
+    else:
+        if user2 in communications:
+            if user1 in communications[user2]:
+                return communications[user2][user1]
     return False
 
 
@@ -43,11 +48,7 @@ class Communication:
         self.sentences = []
 
     def add_sentence(self, sentence, user):
-        if user == self.user1:
-            speaker = 1
-        else:
-            speaker = 2
-        self.sentences.append({speaker: sentence})
+        self.sentences.append({user: sentence})
 
     def get_sentence(self):
         return self.sentences
