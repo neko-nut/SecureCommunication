@@ -9,3 +9,7 @@ img {
 #register{
     padding-left: 100px;
 }
+
+li {
+    background-color: red;
+}

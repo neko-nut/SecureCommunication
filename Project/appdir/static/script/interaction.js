@@ -7,7 +7,9 @@ $(document).ready(function () {
     $("#submit_sentences").on("click", encrypt_sentence);
 });
 
-//
+/**
+ *
+ */
 function encrypt_password() {
     let password = $("#register input[id=password]")
     let data = password.val();
@@ -36,9 +38,9 @@ function encrypt_sentence() {
         let k = $.md5(response["user1"] + ',' + response["user2"])
         let sentence = $("#sentence")
         let data = encrypt(sentence.val(), k)
-        sentence.val(data)
-        $("#communicate input[id=submit]").click()
-        sentence.val("")
+        $.post("/addsentence", {'sentence': data}).done(
+            console.log( sentence.val(""))
+        )
     })
 
 }

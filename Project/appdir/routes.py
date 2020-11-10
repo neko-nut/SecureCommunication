@@ -9,6 +9,7 @@ from appdir.models import User
 from appdir.communications import get_communication, add_communication
 
 
+@application.route('/')
 @application.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -47,7 +48,8 @@ def register():
             return redirect('register')
         else:
             db.session.add(
-                User(name=form.username.data, password=form.password.data, phone=form.phone.data, email=form.email.data))
+                User(name=form.username.data, password=form.password.data, phone=form.phone.data,
+                     email=form.email.data))
             db.session.commit()
             return redirect(url_for("login"))
     return render_template('register.html', form=form)
@@ -55,16 +57,23 @@ def register():
 
 @application.route('/list', methods=['GET', 'POST'])
 def user_list():
+    """
+    Show the user list and the
+    """
     user1 = int(session['USERID'])
     user2 = int(session['SPEAKER'])
     if get_communication(user1, user2) is False:
-        com = add_communication(user1, user2)
-    else:
-        com = get_communication(user1, user2)
-    form = CommunicateForm()
-    if form.validate_on_submit():
-        com.add_sentence(form.sentence.data, session["USERID"])
-    return render_template('list.html', onlines=User.query.all(), form=form)
+        add_communication(user1, user2)
+    return render_template('list.html', onlines=User.query.all())
+
+
+@application.route('/addsentence',  methods=['GET', 'POST'])
+def add_sentence():
+    id1 = int(session["USERID"])
+    id2 = int(session["SPEAKER"])
+    com = get_communication(id1, id2)
+    com.add_sentence(request.form['sentence'], session["USERID"])
+    return True
 
 
 @application.route("/changespeaker", methods=['GET', 'POST'])
@@ -83,6 +92,7 @@ def get_sentence():
     id1 = int(session["USERID"])
     id2 = int(session["SPEAKER"])
     com = get_communication(id1, id2)
+    print(com.get_sentence())
     return jsonify(com.get_sentence())
 
 
@@ -109,3 +119,6 @@ def get_speaker():
     return jsonify({"speaker": session["SPEAKER"]})
 
 
+@application.route("/getspeakername")
+def get_speaker_name():
+    return jsonify({"speaker":  User.query.filter_by(id=session["SPEAKER"]).first().name})

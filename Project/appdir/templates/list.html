@@ -3,19 +3,15 @@
 
     <table>
         <tr>
-            <td rowspan="3">
-                {% for user in onlines %}
-                    <div class="user">
-                        <p onclick="changespeaker({{ user.id }})">{{ user.name }}</p>
-                    </div>
-                {% endfor %}
+            <td>
+                {# search #}
             </td>
             <td>
                 <speaker>
 
                 </speaker>
                 <script>
-                    $.get("/getspeaker").done(function (response) {
+                    $.get("/getspeakername").done(function (response) {
                         let speaker = response["speaker"]
                         $("speaker").html("<speaker>" + speaker + "</speaker>")
                     })
@@ -33,6 +29,14 @@
             </td>
         </tr>
         <tr>
+            {# the list of users #}
+            <td rowspan="2">
+                {% for user in onlines %}
+                    <div class="user">
+                        <p onclick="changespeaker({{ user.id }})">{{ user.name }}</p>
+                    </div>
+                {% endfor %}
+            </td>
             <td>
                 <dev id="com">
 
@@ -49,6 +53,7 @@
                                 let k
                                 $.get("/getspeakers").done(function (response) {
                                     k = $.md5(response["user1"] + ',' + response["user2"])
+                                    // show the decrypted sentence on the screes
                                     $.get("/getsentence").done(function (sentences) {
                                         $("#com").empty()
                                         for (let i = 0; i < sentences.length; i++) {
@@ -70,11 +75,9 @@
             <td>
 
                 <form action="" method="post" novalidate>
-                    {{ form.hidden_tag() }}
                     <dev id="communicate">
-                        {{ form.sentence() }}
-                        {{ form.submit(hidden = true) }}
-                        <input id="submit_sentences" type="button" value="Login">
+                        <input id="sentence" type="text">
+                        <input id="submit_sentences" type="button" value="submit">
                     </dev>
                 </form>
 

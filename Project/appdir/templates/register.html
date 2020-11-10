@@ -3,24 +3,37 @@
 
     <form role="form" action="" method="post" novalidate>
         {{ form.hidden_tag() }}
-        <div id="register">
-            Username
-            {{ form.username() }}
-            <br>
-            Password
-            {{ form.password() }}
-            <br>
-            Confirm Password
-            {{ form.repeat_pwd() }}
-            <br>
-            email
-            {{ form.email() }}
-            <br>
-            Phone
-            {{ form.phone() }}
-            <br>
-            {{ form.submit(hidden = true) }}
-            <input id="submit_register" type="button" value="Sign Up">
-        </div>
+        <fieldset>
+            <legend>Register</legend>
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <ul>
+                        {% for message in messages %}
+                            <li>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+
+            <div id="register">
+                Username
+                {{ form.username() }}
+                <br>
+                Password
+                {{ form.password() }}
+                <br>
+                Confirm Password
+                {{ form.repeat_pwd() }}
+                <br>
+                email
+                {{ form.email() }}
+                <br>
+                Phone
+                {{ form.phone() }}
+                <br>
+                {{ form.submit(hidden = true) }}
+                <input id="submit_register" type="button" value="Sign Up">
+            </div>
+        </fieldset>
     </form>
 {% endblock %}
