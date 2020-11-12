@@ -47,25 +47,38 @@ function encrypt_sentence() {
             console.log( sentence.val(""))
         )
     })
+}
 
+/**
+ * get the data and store it in the content
+ * @param {Object} event
+ */
+
+reader.onload = function(event) {
+    content = event.target.result;
+};
+
+function encrypt_file(event) {
+    let file = event.target.files[0];
+    reader.readAsDataURL(file);
 }
 
 
-/*
+
 // the name and the content of the file
 let name = ''
 let content = ''
 
 // new filereader
 let reader = new FileReader();
-*/
+
 /**
  * load the file
  * if encrypt, read the file as data URI, which will be used to encrypt
  * if decrypt, read the text in the file, which is the incrypted data
  * @param {Object} event the event when load the file
  */
-/*
+
 file.onchange = function(event){
     let file = event.target.files[0];
     name = file.name
@@ -75,24 +88,14 @@ file.onchange = function(event){
         reader.readAsText(file);
     }
 }
- */
 
-/**
- * get the data and store it in the content
- * @param {Object} event
- */
-/*
-reader.onload = function(event) {
-    content = event.target.result;
-};
 
- */
 
 
 /**
  * execute the data and download the file
  */
-/*
+
 file_result.onclick = function() {
     let aTag = document.createElement('a');
     if(method == 0){
@@ -116,14 +119,13 @@ file_result.onclick = function() {
     }
 
 }
- */
+
 
 /**
  * reference:  https://stackoverflow.com/questions/6850276/how-to-convert-dataurl-to-file-object-in-javascript
  * change the data URI into the file
  * @param {String} dataURI the dayaURI which is
  */
-/*
 function dataURItoBlob(dataURI) {
     // convert base64 to raw binary data held in a string
     // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
@@ -149,4 +151,4 @@ function dataURItoBlob(dataURI) {
   
   }
 
- */
+
