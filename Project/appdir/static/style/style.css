@@ -1,15 +1,61 @@
-#register input[id=submit]{
-    width: 20%;
+#large_logo {
+    padding-left: 25%;
+    padding-right: 25%;
+    padding-top: 0%;
+    width: 50%;
 }
 
-img {
-    margin-left: 100px;
+.userinput {
+    border-radius: 5px;
+    width: 95%;
+    padding: 7px 0px;
+    box-shadow: inset 3px 3px 3px #CAE6FD;
+
 }
 
-#register{
-    padding-left: 100px;
+fieldset {
+    width: fit-content;
+    margin-left: 40%;
+    margin-right: 40%;
+    /*width: -moz-fit-content;*/
 }
 
-li {
-    background-color: red;
+usertext {
+    /*margin-left: 40%;*/
 }
+
+#submit_login {
+    background-color: #CAE6FD;
+}
+
+
+#submit_register {
+    background-color: #CAE6FD;
+}
+
+table {
+    margin-right: 20%;
+    margin-left: 20%;
+    margin-bottom: 15%;
+    padding: 0;
+}
+
+#search {
+    width: 90%;
+    margin-left: 4%;
+    margin-right: 3%;
+}
+
+speaker {
+    padding-left: 10px;
+}
+.user {
+    border: black solid;
+    padding-top: 0;
+    margin-top: 0;
+}
+
+p {
+    padding-left: 5px;
+}
+

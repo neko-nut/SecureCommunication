@@ -16,23 +16,24 @@
             {% endwith %}
 
             <div id="register">
-                Username
-                {{ form.username() }}
+                <usertext>Username</usertext><br>
+                {{ form.username(class = "userinput") }}
                 <br>
-                Password
-                {{ form.password() }}
+                <usertext>Password</usertext><br>
+                {{ form.password(class = "userinput") }}
                 <br>
-                Confirm Password
-                {{ form.repeat_pwd() }}
+                <usertext>Confirm Password</usertext><br>
+                {{ form.repeat_pwd(class = "userinput") }}
                 <br>
-                email
-                {{ form.email() }}
+                <usertext>email</usertext><br>
+                {{ form.email(class = "userinput") }}
                 <br>
-                Phone
-                {{ form.phone() }}
+                <usertext>Phone</usertext><br>
+                {{ form.phone(class = "userinput") }}
+                <br>
                 <br>
                 {{ form.submit(hidden = true) }}
-                <input id="submit_register" type="button" value="Sign Up">
+                <input class = "userinput" id="submit_register" type="button" value="Sign Up">
             </div>
         </fieldset>
     </form>

@@ -1,32 +1,35 @@
 {% extends "base.html" %}
 {% block content %}
-
+<br>
+    <br>
+    <br>
     <form role="form" action="" method="post" novalidate>
         {{ form.hidden_tag() }}
         <fieldset>
             <legend>Login</legend>
             {% with messages = get_flashed_messages() %}
                 {% if messages %}
-                    <ul>
-                        {% for message in messages %}
-                            <li>{{ message }}</li>
-                        {% endfor %}
-                    </ul>
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
                 {% endif %}
             {% endwith %}
 
 
             <div id="login">
-                Username
-                {{ form.username() }}
+                <usertext>Username</usertext><br>
+                {{ form.username(class = "userinput") }}
                 <br>
-                Password
-                {{ form.password() }}
+                <br>
+                <usertext>Password</usertext><br>
+                {{ form.password(class = "userinput") }}
+                <br>
                 <br>
                 {{ form.submit(hidden = true) }}
-                <input id="submit_login" type="button" value="Login">
+                <input class="userinput" id="submit_login" type="button" value="Login">
             </div>
-            <a href={{ url_for("register") }}>register now</a>
+            <br>
+            <usertext>If you do not have a account, please <a href={{ url_for("register") }}>register now</a></usertext>
         </fieldset>
     </form>
 
