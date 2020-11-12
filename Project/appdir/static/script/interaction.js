@@ -32,7 +32,12 @@ function encrypt_login() {
     $("#login input[id=submit]").click()
 }
 
-
+/**
+ * after user input, we encrypt the inout by JavaScript
+ * we create the key by using MD5 to encrypt the name form two speakers
+ * This could insure that the original data will not be send to the back-end
+ * This could insure the security of the information
+ */
 function encrypt_sentence() {
     $.get("/getspeakers").done(function (response) {
         let k = $.md5(response["user1"] + ',' + response["user2"])

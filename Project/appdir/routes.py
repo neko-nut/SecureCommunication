@@ -12,6 +12,12 @@ from appdir.communications import get_communication, add_communication
 @application.route('/')
 @application.route('/login', methods=['GET', 'POST'])
 def login():
+    """
+    The login functions
+    We initially choose the user himself as the people he talk to
+    Check the user name and the password
+    store the user id in the session
+    """
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(name=form.username.data).first()
@@ -30,6 +36,9 @@ def login():
 
 @application.route('/logout')
 def logout():
+    """
+    logout
+    """
     session.pop("USERID", None)
     session.pop("SPEAKER", None)
     flash("You have logout")
@@ -38,6 +47,10 @@ def logout():
 
 @application.route('/register', methods=['GET', 'POST'])
 def register():
+    """
+    Register as a new user
+    Encrpted the password
+    """
     form = RegisterForm()
     if form.validate_on_submit():
         if form.password.data != form.repeat_pwd.data:
@@ -58,7 +71,8 @@ def register():
 @application.route('/list', methods=['GET', 'POST'])
 def user_list():
     """
-    Show the user list and the
+    Show the list of users and the text inout
+    the core communication page
     """
     user1 = int(session['USERID'])
     user2 = int(session['SPEAKER'])
@@ -69,6 +83,11 @@ def user_list():
 
 @application.route('/addsentence',  methods=['GET', 'POST'])
 def add_sentence():
+    """
+    get the user and speaker form session
+    find the communication class
+    add the sentence into the class by the method in the class
+    """
     id1 = int(session["USERID"])
     id2 = int(session["SPEAKER"])
     com = get_communication(id1, id2)
@@ -78,6 +97,11 @@ def add_sentence():
 
 @application.route("/changespeaker", methods=['GET', 'POST'])
 def change_speaker():
+    """
+    if we choose another speaker
+    change the data in the session
+    if no communication class for these two users, creat one
+    """
     speaker = request.args.get("speaker")
     session["SPEAKER"] = speaker
     id1 = int(session["USERID"])
@@ -89,6 +113,9 @@ def change_speaker():
 
 @application.route("/getsentence")
 def get_sentence():
+    """
+    get the sentences between these two users from the communication class
+    """
     id1 = int(session["USERID"])
     id2 = int(session["SPEAKER"])
     com = get_communication(id1, id2)
@@ -98,11 +125,17 @@ def get_sentence():
 
 @application.route("/getuser")
 def get_user():
+    """
+    return the id of the current user
+    """
     return jsonify({"id": session["USERID"]})
 
 
 @application.route("/getspeakers")
 def get_speakers():
+    """
+    return the user name of the two speakers
+    """
     id1 = int(session["USERID"])
     id2 = int(session["SPEAKER"])
     if id1 > id2:
@@ -116,9 +149,15 @@ def get_speakers():
 
 @application.route("/getspeaker")
 def get_speaker():
+    """
+    return the id of the user who you talk to
+    """
     return jsonify({"speaker": session["SPEAKER"]})
 
 
 @application.route("/getspeakername")
 def get_speaker_name():
+    """
+    return the name of the user who you talk to
+    """
     return jsonify({"speaker":  User.query.filter_by(id=session["SPEAKER"]).first().name})

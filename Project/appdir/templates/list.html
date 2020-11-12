@@ -16,8 +16,12 @@
                         $("speaker").html("<speaker>" + speaker + "</speaker>")
                     })
 
+                    /**
+                     * after you choose the people you want to talk with
+                     * send the people you choose to the beck-end
+                     * @param id: the if of the people you want to speak with
+                     */
                     function changespeaker(id) {
-                        console.log(id)
                         $.get("/changespeaker", {"speaker": id})
                         $.get("/getspeaker").done(function (response) {
                             let speaker = response["speaker"]
@@ -43,6 +47,12 @@
                 </dev>
 
                 <script>
+                    /**
+                     * get the user name and user id form back-end
+                     * use user ids to find the related communication class
+                     * use user names to get the key
+                     * decrypt the sentence, and show it on the screen
+                     */
                     setInterval(function () {
                         let user1
                         $.get("/getuser").done(function (response) {
