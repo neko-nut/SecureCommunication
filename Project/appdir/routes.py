@@ -92,7 +92,33 @@ def add_sentence():
     id2 = int(session["SPEAKER"])
     com = get_communication(id1, id2)
     com.add_sentence(request.form['sentence'], session["USERID"])
-    return True
+    return jsonify({"success": 1})
+
+
+@application.route('/addfile',  methods=['GET', 'POST'])
+def add_file():
+    """
+    get the user and speaker form session
+    find the communication class
+    add the file into the class by the method in the class
+    """
+    id1 = int(session["USERID"])
+    id2 = int(session["SPEAKER"])
+    com = get_communication(id1, id2)
+    com.add_file(request.form['file'], request.form["name"])
+    return jsonify({"success": 1})
+
+
+@application.route("/getfile")
+def get_file():
+    """
+    get the files between these two users from the communication class
+    """
+    id1 = int(session["USERID"])
+    id2 = int(session["SPEAKER"])
+    com = get_communication(id1, id2)
+    print(com.get_file())
+    return jsonify(com.get_file())
 
 
 @application.route("/changespeaker", methods=['GET', 'POST'])

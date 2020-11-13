@@ -79,3 +79,18 @@ class Communication:
     """
     def get_sentence(self):
         return self.sentences
+
+    """
+    add new file
+    """
+    def add_file(self, file, name):
+        self.files.append({name: file})
+        print(self.files)
+
+    """
+    return all the sentences
+    """
+    def get_file(self):
+        print(self.files)
+        return self.files
+

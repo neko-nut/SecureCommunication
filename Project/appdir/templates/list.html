@@ -1,12 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
 
-    <table>
-        <tr>
+    <table cellspacing="0" border="1px" width="60%">
+        <col style="width:10%">
+        <col style="width: 60%">
+        <tr id="title" height="50px">
             <td>
-                {# search #}
+
             </td>
-            <td>
+            <td id="speaker_name" colspan="2">
                 <speaker>
 
                 </speaker>
@@ -22,24 +24,28 @@
                      * @param id: the if of the people you want to speak with
                      */
                     function changespeaker(id) {
-                        $.get("/changespeaker", {"speaker": id})
-                        $.get("/getspeaker").done(function (response) {
-                            let speaker = response["speaker"]
-                            $("speaker").html("<speaker>" + speaker + "</speaker>")
+                        $.get("/changespeaker", {"speaker": id}).done(function () {
+                            $.get("/getspeakername").done(function (response) {
+                                let speaker = response["speaker"]
+                                $("speaker").html("<speaker>" + speaker + "</speaker>")
+                                console.log(speaker)
+                            })
                         })
                     }
                 </script>
 
             </td>
         </tr>
-        <tr>
+        <tr height="500px">
             {# the list of users #}
-            <td rowspan="2">
-                {% for user in onlines %}
-                    <div class="user">
-                        <p onclick="changespeaker({{ user.id }})">{{ user.name }}</p>
-                    </div>
-                {% endfor %}
+            <td rowspan="2" id="list">
+                <div id="users" style="height: 571px">
+                    {% for user in onlines %}
+                        <div class="user" onclick="changespeaker({{ user.id }})">
+                            <p>{{ user.name }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
             </td>
             <td>
                 <dev id="com">
@@ -69,19 +75,97 @@
                                         for (let i = 0; i < sentences.length; i++) {
                                             if (user1 in sentences[i]) {
                                                 $("#com").append("<atalk>" + decrypt(sentences[i][user1], k) + "</atalk><br>")
+                                                $("atalk").scrollIntoView()
                                             } else {
                                                 $("#com").append("<btalk>" + decrypt(sentences[i][user2], k) + "</btalk><br>")
+                                                $("btalk").scrollIntoView()
                                             }
                                         }
                                     })
                                 })
                             })
                         })
-                    }, 3000);
+                    }, 30000);
+                </script>
+            </td>
+            <td>
+                <files>
+
+                </files>
+                <script>
+                    setInterval(function () {
+                        console.log("file")
+                        let user1
+                        $.get("/getuser").done(function (response) {
+                            user1 = response["id"]
+                            let user2
+                            $.get("/getspeaker").done(function (response) {
+                                user2 = response["speaker"]
+                                let k
+                                $.get("/getspeakers").done(function (response) {
+                                    k = $.md5(response["user1"] + ',' + response["user2"])
+                                    // show the decrypted sentence on the screes
+                                    $.get("/getfile").done(function (files) {
+                                        $("files").empty()
+                                        for (let i = 0; i < files.length; i++) {
+                                            for (let j in files[i]) {
+                                                let dataURL = decrypt(files[i][j], k)
+                                                dataURL = dataURL.split('\0')[0];
+                                                console.log(j)
+                                                let blob = dataURItoBlob(dataURL);
+                                                $("files").append("<p id=" + j + ">" + j + "</p>")
+                                                let ele = document.getElementById(j)
+                                                ele.onclick = function(){
+                                                    // if decrypt, decrypt the data and remove the 0 which we add before
+                                                    let aTag = document.createElement('a');
+                                                    // set a link to the file and click it to download
+                                                    aTag.download = j;
+                                                    aTag.href = URL.createObjectURL(blob);
+                                                    aTag.click();
+                                                    URL.revokeObjectURL(blob);
+                                                }
+                                            }
+                                        }
+                                    })
+                                })
+                            })
+                        })
+                    }, 30000);
+
+                    /**
+                     * reference:  https://stackoverflow.com/questions/6850276/how-to-convert-dataurl-to-file-object-in-javascript
+                     * change the data URI into the file
+                     * @param {String} dataURI the dayaURI which is
+                     */
+                    function dataURItoBlob(dataURI) {
+                        // convert base64 to raw binary data held in a string
+                        // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
+                        var byteString = atob(dataURI.split(',')[1]);
+
+                        // separate out the mime component
+                        var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+                        // write the bytes of the string to an ArrayBuffer
+                        var ab = new ArrayBuffer(byteString.length);
+
+                        // create a view into the buffer
+                        var ia = new Uint8Array(ab);
+
+                        // set the bytes of the buffer to the correct values
+                        for (var i = 0; i < byteString.length; i++) {
+                            ia[i] = byteString.charCodeAt(i);
+                        }
+
+                        // write the ArrayBuffer to a blob, and you're done
+                        var blob = new Blob([ab], {type: mimeString});
+                        return blob;
+
+                    }
+
                 </script>
             </td>
         </tr>
-        <tr>
+        <tr style="height: 40px">
             <td>
 
                 <form action="" method="post" novalidate>
@@ -92,7 +176,53 @@
                 </form>
 
             </td>
+            <td>
+                <form action="" method="post" novalidate>
+                    <dev id="files">
+                        <input class="user_input" id="file" type="file" value="choose file">
+                        <input class="user_input" id="upload_file" type="button" value="upload file" onclick="load()">
+                    </dev>
+                </form>
+                <script>
+                    // the name and the content of the file
+                    let name = ''
+                    let content = ''
 
+                    // new filereader
+                    let reader = new FileReader();
+
+                    let file = document.getElementById("file")
+                    /**
+                     * get the data and store it in the content
+                     * @param {Object} event
+                     */
+                    reader.onload = function (event) {
+                        content = event.target.result;
+                    };
+
+                    file.onchange = function (event) {
+                        let file = event.target.files[0];
+                        name = file.name
+                        reader.readAsDataURL(file);
+                        console.log(111111)
+                    }
+
+                    /**
+                     * execute the data and download the file
+                     */
+
+                    function load() {
+                        let file = $("#file")
+                        console.log(1111111111)
+                        $.get("/getspeakers").done(function (response) {
+                            let k = $.md5(response["user1"] + ',' + response["user2"])
+                            $.post("/addfile", {'name': name, 'file': encrypt(content, k)}).done(
+                                console.log(file.val(""))
+                            )
+                        })
+                    }
+                </script>
+            </td>
         </tr>
     </table>
 
