@@ -5,29 +5,31 @@
     width: 50%;
 }
 
+body{
+    background-image: url("../image/background.JPG");
+    background-size: 100%;
+}
+
+
 .userinput {
     border-radius: 5px;
     width: 95%;
     padding: 7px 0px;
     box-shadow: inset 3px 3px 3px #CAE6FD;
+    border: darkblue solid 1px;
 
 }
 
 fieldset {
-    width: fit-content;
     margin-left: 40%;
     margin-right: 40%;
+    background: white;
     /*width: -moz-fit-content;*/
-}
-
-usertext {
-    /*margin-left: 40%;*/
 }
 
 #submit_login {
     background-color: #CAE6FD;
 }
-
 
 #submit_register {
     background-color: #CAE6FD;
@@ -44,18 +46,70 @@ table {
     width: 90%;
     margin-left: 4%;
     margin-right: 3%;
+    border-radius: 5px;
+    padding: 4px 0px;
 }
 
 speaker {
     padding-left: 10px;
 }
+
 .user {
     border: black solid;
     padding-top: 0;
     margin-top: 0;
 }
 
+.user:hover {
+    box-shadow: inset 3px 3px 3px gray;
+}
+
 p {
     padding-left: 5px;
 }
 
+atalk {
+    float: initial;
+    padding: 3px 10px;
+    margin-right: 15px;
+    border-radius: 3px;
+}
+
+atalk {
+    background-color: lightgreen;
+}
+
+btalk {
+    padding: 3px 10px;
+    margin-right: 15px;
+    border-radius: 3px;
+    background-color: darkorange;
+}
+
+#sentence {
+    width: 70%;
+    margin-left: 3%;
+    border-radius: 3px;
+}
+
+#file{
+    width: 50%;
+}
+
+table{
+    background: white;
+}
+
+
+#title{
+    background-color: silver;
+}
+
+speaker{
+    font-size: 20px;
+}
+
+
+#list{
+    background-color: #E7E7E7;
+}
