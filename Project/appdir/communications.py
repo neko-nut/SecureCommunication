@@ -59,6 +59,7 @@ class Communication:
     user1 = 0
     user2 = 0
     sentences = []
+    files = []
 
     """
     create the class through two user ids
@@ -67,6 +68,7 @@ class Communication:
         self.user1 = user_1
         self.user2 = user_2
         self.sentences = []
+        self.files = []
 
     """
     add new sentences
